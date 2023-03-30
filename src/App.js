@@ -4,9 +4,11 @@ import { useState } from 'react';
 
 function App() {
   const [result, setResult] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const readUploadFile = (e) => {
     console.log('aaaaaa');
+    setIsLoading(true);
     e.preventDefault();
     if (e.target.files) {
       const reader = new FileReader();
@@ -48,6 +50,7 @@ function App() {
     });
     all_result.shift();
     setResult(all_result);
+    setIsLoading(false);
   };
 
   const handleTotalHS = (data) => {
@@ -59,6 +62,16 @@ function App() {
   return (
     <div className='App'>
       {/* <label for="formFile" class="form-label">Default file input example</label> */}
+      {isLoading && (
+        <div class='alert alert-danger' role='alert'>
+          Đang thực hiện....
+        </div>
+      )}
+      {!isLoading && !!result.length && (
+        <div class='alert alert-success' role='alert'>
+          Đã hoàn thành!
+        </div>
+      )}
       <div className='container'>
         <div className='row my-3'>
           <div className='col-6'>
