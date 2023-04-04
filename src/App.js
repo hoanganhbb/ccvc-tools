@@ -1,116 +1,49 @@
 import './App.css';
-import * as xlsx from 'xlsx';
-import { useState } from 'react';
+import './assets/theme.css';
+
+import Header from './components/Header';
+import MenuApp from './components/MenuApp';
 
 function App() {
-  const [result, setResult] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const readUploadFile = (e) => {
-    console.log('aaaaaa');
-    setIsLoading(true);
-    e.preventDefault();
-    if (e.target.files) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const data = e.target.result;
-        const workbook = xlsx.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const json = xlsx.utils.sheet_to_json(worksheet);
-        handleData(json);
-        // console.log(json);
-      };
-      reader.readAsArrayBuffer(e.target.files[0]);
-    }
-  };
-
-  const handleData = (data) => {
-    let currentDept = null;
-    let arr = {
-      ma_don_vi: '',
-      ten_don_vi: '',
-      data: [],
-    };
-    let all_result = [];
-    data.forEach((element) => {
-      if (!element.don_vi_cap_2) {
-        currentDept = element.__EMPTY;
-        all_result.push(arr);
-        arr = {
-          ma_don_vi: '',
-          ten_don_vi: '',
-          data: [],
-        };
-        return;
-      }
-      arr.ma_don_vi = element.ma_don_vi_cap_2;
-      arr.ten_don_vi = currentDept;
-      arr.data.push(element);
-    });
-    all_result.shift();
-    setResult(all_result);
-    setIsLoading(false);
-  };
-
-  const handleTotalHS = (data) => {
-    let count = 0;
-    data.map((item) => (count = count + item.data.length));
-    return count;
-  };
-
   return (
     <div className='App'>
-      {/* <label for="formFile" class="form-label">Default file input example</label> */}
-      {isLoading && (
-        <div class='alert alert-danger' role='alert'>
-          Đang thực hiện....
-        </div>
-      )}
-      {!isLoading && !!result.length && (
-        <div class='alert alert-success' role='alert'>
-          Đã hoàn thành!
-        </div>
-      )}
-      <div className='container'>
-        <div className='row my-3'>
-          <div className='col-6'>
-            <input className='form-control' type='file' name='upload' id='upload' onChange={readUploadFile} />
+      <Header></Header>
+      <section className='pt-4 pt-md-11'>
+        <div className='container'>
+          <div className='row align-items-center'>
+            <div className='col-12 col-md-5 col-lg-6 order-md-2'>
+              <img
+                alt=''
+                src='https://landkit.goodthemes.co/assets/img/illustrations/illustration-2.png'
+                className='img-fluid mw-md-150 mw-lg-100 mb-6 mb-md-0 aos-init aos-animate'
+                data-aos='fade-up'
+                data-aos-delay='100'
+              />
+            </div>
+            <div className='col-12 col-md-7 col-lg-6 order-md-1 aos-init aos-animate' data-aos='fade-up'>
+              <h1 className='display-4 text-center text-md-start'>
+                Welcome to <span className='text-primary'>Fanvist</span>. <br />
+                Tất cả về Phan Đức Anh.
+              </h1>
+
+              <p className='lead text-center text-md-start text-muted mb-6 mb-lg-8'>
+                Build a beautiful, modern website with flexible Bootstrap components built from scratch.
+              </p>
+
+              <div className='text-center text-md-start'>
+                <a href='overview.html' className='btn btn-primary shadow lift me-2'>
+                  Liên hệ facebook <i className='bi bi-arrow-right ms-2'></i>
+                </a>
+                <a href='docs/index.html' className='btn btn-primary-soft lift'>
+                  Nhắn tin cho mình
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-        <div>
-          <h5 className='fw-bolder'>Thống kê chung</h5>
-          <p>Tổng số hồ sơ trên hệ thống: {handleTotalHS(result)}</p>
-        </div>
-        <table className='table table-bordered border-black table-striped'>
-          <thead>
-            <tr>
-              <th className='table-bordered text-center'>STT</th>
-              <th className='table-bordered text-center'>Mã đơn vị</th>
-              <th className='table-bordered text-center'>Tên Đơn vị</th>
-              <th className='table-bordered text-center' style={{ width: 180 }}>
-                Số lượng hồ sơ có trên hệ thống
-              </th>
-              <th className='table-bordered text-center' style={{ width: 160 }}>
-                Số lượng file đính kèm 2C
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {result &&
-              !!result.length &&
-              result.map((item, index) => (
-                <tr key={index}>
-                  <td className='table-bordered text-center'>{index + 1}</td>
-                  <td className='table-bordered text-start'>{item.ma_don_vi}</td>
-                  <td className='table-bordered text-start'>{item.ten_don_vi}</td>
-                  <td className='table-bordered text-center'>{item.data.length}</td>
-                  <td className='table-bordered text-center'>{item.data.filter((ele) => ele.so_ho_so > 0).length}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+      </section>
+      {/* <label for="formFile" className="form-label">Default file input example</label> */}
+      <MenuApp></MenuApp>
     </div>
   );
 }

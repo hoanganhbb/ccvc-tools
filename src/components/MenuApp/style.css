@@ -1,0 +1,11 @@
+.menu-app-link:hover {
+  text-decoration: none;
+}
+
+.menu-app-link:hover .menu-overlay {
+  transition: 200ms;
+}
+
+.menu-app-link:hover .menu-overlay {
+  opacity: 0.7 !important;
+}
